@@ -285,10 +285,10 @@ module IdentityCache
         child_class.send(:include, ArTransactionChanges) unless child_class.include?(ArTransactionChanges)
         child_class.send(:include, ParentModelExpiration) unless child_class.include?(ParentModelExpiration)
 
-        after_action_name = "expire_parent_cache_#{self.name.underscore}"
+        after_action_name = "expire_parent_cache_#{self.name.parameterize.underscore}"
 
         child_class.class_eval(<<-CODE, __FILE__, __LINE__ + 1)
-        
+
           after_commit :#{after_action_name}
           after_touch  :#{after_action_name}
           add_parent_expiration_entry :#{after_action_name}
